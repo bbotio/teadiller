@@ -1,0 +1,19 @@
+{
+	"ImportPath": "teadiller",
+	"GoVersion": "go1.5",
+	"Deps": [
+		{
+			"ImportPath": "github.com/moul/http2curl",
+			"Rev": "1c29be06762e43e04dd954a01c66991104ce4374"
+		},
+		{
+			"ImportPath": "github.com/parnurzeal/gorequest",
+			"Comment": "v0.2.13-7-g27bfb0d",
+			"Rev": "27bfb0dcbcc020d11b7839af416fb8dafc2ab01c"
+		},
+		{
+			"ImportPath": "golang.org/x/net/publicsuffix",
+			"Rev": "0cb26f788dd4625d1956c6fd97ffc4c90669d129"
+		}
+	]
+}
