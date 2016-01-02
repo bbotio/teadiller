@@ -4,6 +4,7 @@ import (
     "log"
     "os"
     "teadiller/Godeps/_workspace/src/github.com/Syfaro/telegram-bot-api"
+//    "teadiller/models"
 )
 
 func main() {
