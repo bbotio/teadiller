@@ -2,10 +2,6 @@ package models
 
 import (
 	"time"
-	"path/filepath"
-	"github.com/tealeg/xlsx"
-	"fmt"
-	"errors"
 )
 
 type DeliveryType string
@@ -46,7 +42,7 @@ type Order struct {
 	Comment      string // comments from seller
 }
 
-func (p DeliveryType) Parse(deliveryType string) DeliveryType {
+func (deliveryType DeliveryType) Parse(deliveryType string) DeliveryType {
 	switch deliveryType {
 	case "Self-service":
 		return SelfService
@@ -56,15 +52,15 @@ func (p DeliveryType) Parse(deliveryType string) DeliveryType {
 	return SelfService
 }
 
-func (p DeliveryType) String() string {
-	return string(p)
+func (deliveryType DeliveryType) String() string {
+	return string(deliveryType)
 }
 
-func (p OrderStatus) String() string {
-	return string(p)
+func (orderStatus OrderStatus) String() string {
+	return string(orderStatus)
 }
 
-func (p OrderStatus) Parse(code string) OrderStatus {
+func (orderStatus OrderStatus) Parse(code string) OrderStatus {
 	switch code {
 	case "New":
 		return New
@@ -85,31 +81,8 @@ func (p OrderStatus) Parse(code string) OrderStatus {
 	return New
 }
 
-func (order Order) Save(filepath string) {
-	file, _ := xlsx.OpenFile(filepath)
-
-	sheet, _ := getSheetByName(file, "orders")
-	row := sheet.AddRow();
-
-	row.AddCell().SetString(order.Id)
-	row.AddCell().SetString(order.ItemId)
-	row.AddCell().SetString(order.Buyer.Name)
-	row.AddCell().SetString(order.Delivery.DeliveryType.String())
-	row.AddCell().SetString(order.Delivery.Address)
-	row.AddCell().SetString(fmt.Sprint(order.Datetime.Format(time.ANSIC)))
-	row.AddCell().SetString(order.Status.String())
-	row.AddCell().SetString(order.PaypallToken)
-	row.AddCell().SetString(order.Comment)
-
-	file.Save(filepath)
-}
-
-func getSheetByName(file *xlsx.File, sheetName string) (*xlsx.Sheet, error) {
-	for _, sheet := range file.Sheets {
-		if sheet.Name == "orders" {
-			return sheet, nil
-		}
-	}
-
-	return nil, errors.New("Sheet with name = " + sheetName + " not found.")
+type OrderDao interface {
+	GetById(id string) (*Order, error)
+	GetAll() []*Order
+	Save(order *Order)
 }
