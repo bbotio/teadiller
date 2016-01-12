@@ -7,7 +7,7 @@ import (
     "syscall"
     "teadiller/Godeps/_workspace/src/github.com/Syfaro/telegram-bot-api"
 //    "teadiller/models"
-      "teadiller/botflow"
+    "teadiller/botflow"
 )
 
 func main() {

@@ -17,3 +17,8 @@ type Item struct {
     Count float64
     AdditionalFields map[string]string
 }
+
+type ItemDao interface {
+	GetById(id string) (*Item, error)
+	GetAll() []*Item
+}

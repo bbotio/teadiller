@@ -4,7 +4,12 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/Syfaro/telegram-bot-api",
-			"Rev": "f219f3e9db18600bec123bc22f2976609c82995b"
+			"Rev": "1ae7803be06a7a521004632d8aa02dbc38c068f8"
+		},
+		{
+			"ImportPath": "github.com/tealeg/xlsx",
+			"Comment": "go1.1.2-443-ge16993b",
+			"Rev": "e16993b205897ff3cf1715e7fa8d0b9c4c847dce"
 		},
 		{
 			"ImportPath": "github.com/technoweenie/multipartstreamer",
