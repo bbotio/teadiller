@@ -42,57 +42,59 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
     go func() {
         for {
             select {
-            case update := <- updates:
-                log.Printf("Got an update %s", update)
-                log.Printf("Message text %s", update.Message.Text)
-                userRuntimeId := fmt.Sprintf("%s_%s", update.Message.From.ID, update.Message.Chat.ID)
-                var userRuntime UserRuntime = UserRuntime{}
+                case update := <-updates:
+                    log.Printf("Got an update %s", update)
+                    log.Printf("Message text %s", update.Message.Text)
+                    userRuntimeId := fmt.Sprintf("%s_%s", update.Message.From.ID, update.Message.Chat.ID)
+                    var userRuntime UserRuntime = UserRuntime{}
 
-                userRuntime, ok := runtime[userRuntimeId]
-                if (!ok) {
-                    userRuntime = UserRuntime{Context{}, initFlow}
-                    log.Printf("Init runtime %s", userRuntime)
-                }
-
-                text := update.Message.Text
-                if strings.HasPrefix(text, botname) {
-                    text = text[len(botname):]
-                }
-
-                if strings.HasSuffix(text, botname) {
-                    text = text[0:len(text) - len(botname)]
-                }
-                text = strings.TrimSpace(text)
-
-                foundFlow := initFlow
-                currentFlow := userRuntime.UserFlow
-
-                // If flow was ended reset it to init flow
-                if len(currentFlow.Nexts) == 0 {
-                    log.Printf("Reset flow to init")
-                    currentFlow = initFlow
-                }
-
-                log.Printf("Handle the following text '%s'", text)
-                for _, flow := range currentFlow.Nexts {
-                    if flow.Command == "" { // found default flow
-                        log.Printf("Set default flow")
-                        foundFlow = flow
-                    } else if flow.Command == text { // found command flow
-                        log.Printf("Found command handler %s", flow)
-                        foundFlow = flow
-                        break
+                    userRuntime, ok := runtime[userRuntimeId]
+                    if (!ok) {
+                        userRuntime = UserRuntime{Context{}, initFlow}
+                        log.Printf("Init runtime %s", userRuntime)
                     }
-                }
 
-                userRuntime.UserFlow = foundFlow
+                    text := update.Message.Text
+                    if strings.HasPrefix(text, botname) {
+                        text = text[len(botname):]
+                    }
 
-                response, _ := userRuntime.UserFlow.Handler(update.Message, userRuntime.UserContext)
-                // TODO: check error
-                bot.Send(response)
-            case <- done:
-                log.Printf("Handling of bot updates were stoped")
-                return
+                    if strings.HasSuffix(text, botname) {
+                        text = text[0:len(text) - len(botname)]
+                    }
+                    text = strings.TrimSpace(text)
+
+                    foundFlow := initFlow
+                    nextFlows := userRuntime.UserFlow.Nexts
+
+                    // If flow was ended reset it to init flow
+                    if len(nextFlows) == 0 {
+                        log.Printf("Reset flow to init")
+                        nextFlows = initFlow.Nexts
+                    } else {
+                        nextFlows = append(nextFlows, initFlow.Nexts...)
+                    }
+
+                    log.Printf("Handle the following text '%s'", text)
+                    for _, flow := range nextFlows {
+                        if flow.Command == "" { // found default flow
+                            log.Printf("Set default flow")
+                            foundFlow = flow
+                        } else if flow.Command == text { // found command flow
+                            log.Printf("Found command handler %s", flow)
+                            foundFlow = flow
+                            break
+                        }
+                    }
+
+                    userRuntime.UserFlow = foundFlow
+
+                    response, _ := userRuntime.UserFlow.Handler(update.Message, userRuntime.UserContext)
+                    // TODO: check error
+                    bot.Send(response)
+                case <- done:
+                    log.Printf("Handling of bot updates were stoped")
+                    return
             }
         }
     }()
