@@ -6,18 +6,19 @@ import (
     "os/signal"
     "syscall"
     "teadiller/Godeps/_workspace/src/github.com/Syfaro/telegram-bot-api"
-//    "teadiller/models"
     "teadiller/botflow"
+    "teadiller/web"
 )
 
 func main() {
-    handler := func(msg tgbotapi.Message, ctx botflow.Context) (tgbotapi.MessageConfig, error) {
-                       return tgbotapi.NewMessage(msg.Chat.ID, "Would you like tea?"), nil
+    handler := func(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+                       return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "Would you like tea?")}, nil
                     }
 
     initFlow := botflow.Flow{Command: "", Handler: handler}
-    aboutHandler := func(msg tgbotapi.Message, ctx botflow.Context) (tgbotapi.MessageConfig, error) {
-                       return tgbotapi.NewMessage(msg.Chat.ID, "I'm tea bot I wanna sale you everything"), nil
+    aboutHandler := func(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+                       return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "I'm tea bot I wanna sale you everything"),
+                                                        tgbotapi.NewMessage(msg.Chat.ID, "Really")}, nil
                     }
     initFlow.Bind("/about", aboutHandler)
 
@@ -27,6 +28,8 @@ func main() {
     if err != nil {
         panic(err)
     }
+
+    web.StartServer(os.Getenv("BOT_WEB_PORT"))
 
     signalChannel := make(chan os.Signal, 2)
     signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)

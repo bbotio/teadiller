@@ -12,7 +12,7 @@ type Context map[string]string
 type Flow struct {
     Nexts []Flow // list of next steps. So list of flows use here because it depends on context
     Command string // Default handler has this field is nil otherwise command name
-    Handler func(updateMessage tgbotapi.Message, requestContext Context) (tgbotapi.MessageConfig, error) // hundler function
+    Handler func(updateMessage tgbotapi.Message, requestContext Context) ([]tgbotapi.MessageConfig, error) // hundler function
 }
 
 type UserRuntime struct {
@@ -21,7 +21,7 @@ type UserRuntime struct {
 }
 
 // this function bind to the current frow new one and return binded flow
-func (f *Flow) Bind(command string, handler func(tgbotapi.Message, Context) (tgbotapi.MessageConfig, error)) Flow {
+func (f *Flow) Bind(command string, handler func(tgbotapi.Message, Context) ([]tgbotapi.MessageConfig, error)) Flow {
     bindedFlow := Flow{nil, command, handler}
     f.Nexts = append(f.Nexts, bindedFlow)
     return bindedFlow
@@ -89,9 +89,11 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
 
                     userRuntime.UserFlow = foundFlow
 
-                    response, _ := userRuntime.UserFlow.Handler(update.Message, userRuntime.UserContext)
+                    responses, _ := userRuntime.UserFlow.Handler(update.Message, userRuntime.UserContext)
                     // TODO: check error
-                    bot.Send(response)
+                    for _,response := range responses {
+                        bot.Send(response)
+                    }
                 case <- done:
                     log.Printf("Handling of bot updates were stoped")
                     return
