@@ -6,8 +6,8 @@ import (
     "os/signal"
     "syscall"
     "teadiller/Godeps/_workspace/src/github.com/Syfaro/telegram-bot-api"
-//    "teadiller/models"
     "teadiller/botflow"
+    "teadiller/web"
 )
 
 func main() {
@@ -28,6 +28,8 @@ func main() {
     if err != nil {
         panic(err)
     }
+
+    web.StartServer(os.Getenv("BOT_WEB_PORT"))
 
     signalChannel := make(chan os.Signal, 2)
     signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)
