@@ -11,13 +11,14 @@ import (
 )
 
 func main() {
-    handler := func(msg tgbotapi.Message, ctx botflow.Context) (tgbotapi.MessageConfig, error) {
-                       return tgbotapi.NewMessage(msg.Chat.ID, "Would you like tea?"), nil
+    handler := func(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+                       return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "Would you like tea?")}, nil
                     }
 
     initFlow := botflow.Flow{Command: "", Handler: handler}
-    aboutHandler := func(msg tgbotapi.Message, ctx botflow.Context) (tgbotapi.MessageConfig, error) {
-                       return tgbotapi.NewMessage(msg.Chat.ID, "I'm tea bot I wanna sale you everything"), nil
+    aboutHandler := func(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+                       return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "I'm tea bot I wanna sale you everything"),
+                                                        tgbotapi.NewMessage(msg.Chat.ID, "Really")}, nil
                     }
     initFlow.Bind("/about", aboutHandler)
 
