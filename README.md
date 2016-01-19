@@ -26,3 +26,35 @@ docker run -d -v "$PWD":/go/src/teadiller -w /go/src/teadiller --env GOPATH="/go
 ```
 msg.ReplyMarkup = tgbotapi.ReplyKeyboardMarkup{[][]string{{"black tea", "green tea", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8"}}, false, false, false}
 ```
+
+## Excel file format
+There should be at least one sheet - 'items', which is filled by user.
+
+This sheet must contain the next columns (order is important):
+
+| Id | Name | Description | Photo | Tags | Item Type | Properties | Count |
+|----|------|-------------|-------|------|-----------|------------|-------|
+
+Id - numerical identificator of item
+
+Name - displayed name of item
+
+Description - some description
+
+Photo - path to image of item
+
+Tags - some tags, divided by comma (e.g.: tea,green,indian)
+
+Item Type - unit/measure of item (e.g.: gramm, liter, unit and etc.)
+
+Properties - additional properties, defined in the next format: 'prop1=val1,prop2=val2,...'
+
+Count - amount of available ```Item Type```
+
+There's also one more sheet - 'orders' with the next columns:
+
+| Id | Item Id | Buyer Name | Delivery Type | Address | Date Time | Status | PayPal token | Comment |
+|----|---------|------------|---------------|---------|-----------|--------|--------------|---------|
+
+It's filled out by bot, user shouldn't modify any data here.
+User can find in this table some useful info about customer like his name, chosen delivery type, address or comment.
