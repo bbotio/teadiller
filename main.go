@@ -5,24 +5,18 @@ import (
     "os"
     "os/signal"
     "syscall"
-    "teadiller/Godeps/_workspace/src/github.com/Syfaro/telegram-bot-api"
     "teadiller/botflow"
     "teadiller/web"
+    "teadiller/flows"
 )
 
 func main() {
-    handler := func(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
-                       return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "Would you like tea?")}, nil
-                    }
 
-    initFlow := botflow.Flow{Command: "", Handler: handler}
-    aboutHandler := func(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
-                       return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "I'm tea bot I wanna sale you everything"),
-                                                        tgbotapi.NewMessage(msg.Chat.ID, "Really")}, nil
-                    }
-    initFlow.Bind("/about", aboutHandler)
-
+    initFlow := botflow.Flow{Command: "", Handler: flows.Default}
+    initFlow.Bind("/about", flows.About)
     log.Printf("Bot Flow: %s", initFlow)
+
+
     done := make(chan bool)
     err := botflow.StartBot(os.Getenv("TELEGRAMM_TOKEN"), os.Getenv("TELEGRAM_BOT_NAME"), initFlow, done)
     if err != nil {
