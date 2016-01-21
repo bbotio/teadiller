@@ -7,7 +7,7 @@ import (
     "teadiller/Godeps/_workspace/src/github.com/Syfaro/telegram-bot-api"
 )
 
-type Context map[string]string
+type Context map[string]interface{}
 
 type Flow struct {
     Nexts []Flow // list of next steps. So list of flows use here because it depends on context
