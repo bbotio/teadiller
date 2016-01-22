@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 	"strings"
+	"strconv"
 )
 
 type ExcelOrderDao struct {
@@ -38,6 +39,7 @@ func (excel ExcelOrderDao) Save(order *models.Order) {
 
 	row.AddCell().SetString(order.Id)
 	row.AddCell().SetString(order.ItemId)
+	row.AddCell().SetString(order.Count)
 	row.AddCell().SetString(order.Buyer.Name)
 	row.AddCell().SetString(order.Delivery.DeliveryType.String())
 	row.AddCell().SetString(order.Delivery.Address)
@@ -72,18 +74,20 @@ func parseOrdersSheet(sheet *xlsx.Sheet) []*models.Order {
 			case 1:
 				order.ItemId = cell.Value
 			case 2:
-				order.Buyer.Name = cell.Value
+				order.Count = strconv.ParseFloat(cell.Value, 64)
 			case 3:
-				order.Delivery.DeliveryType = order.Delivery.DeliveryType.Parse(cell.Value)
+				order.Buyer.Name = cell.Value
 			case 4:
-				order.Delivery.Address = cell.Value
+				order.Delivery.DeliveryType = order.Delivery.DeliveryType.Parse(cell.Value)
 			case 5:
-				order.Datetime, _ = time.Parse(time.ANSIC, cell.Value)
+				order.Delivery.Address = cell.Value
 			case 6:
-				order.Status = order.Status.Parse(cell.Value)
+				order.Datetime, _ = time.Parse(time.ANSIC, cell.Value)
 			case 7:
-				order.PaypallToken = cell.Value
+				order.Status = order.Status.Parse(cell.Value)
 			case 8:
+				order.PaypallToken = cell.Value
+			case 9:
 				order.Comment = cell.Value
 			}
 		}

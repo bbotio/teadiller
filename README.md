@@ -53,8 +53,8 @@ Count - amount of available ```Item Type```
 
 There's also one more sheet - 'orders' with the next columns:
 
-| Id | Item Id | Buyer Name | Delivery Type | Address | Date Time | Status | PayPal token | Comment |
-|----|---------|------------|---------------|---------|-----------|--------|--------------|---------|
+| Id | Item Id | Count | Buyer Name | Delivery Type | Address | Date Time | Status | PayPal token | Comment |
+|----|---------|-------|------------|---------------|---------|-----------|--------|--------------|---------|
 
 It's filled out by bot, user shouldn't modify any data here.
 User can find in this table some useful info about customer like his name, chosen delivery type, address or comment.

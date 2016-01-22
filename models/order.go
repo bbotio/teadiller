@@ -34,6 +34,7 @@ type Delivery struct {
 type Order struct {
 	Id           string
 	ItemId       string
+	Count        float64
 	Buyer        Buyer
 	Delivery     Delivery
 	Datetime     time.Time
