@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+    "sync"
 )
 
 type DeliveryType string
@@ -42,7 +43,7 @@ type Order struct {
 	Comment      string // comments from seller
 }
 
-func (deliveryType DeliveryType) Parse(deliveryType string) DeliveryType {
+func (dt DeliveryType) Parse(deliveryType string) DeliveryType {
 	switch deliveryType {
 	case "Self-service":
 		return SelfService
@@ -60,7 +61,7 @@ func (orderStatus OrderStatus) String() string {
 	return string(orderStatus)
 }
 
-func (orderStatus OrderStatus) Parse(code string) OrderStatus {
+func (os OrderStatus) Parse(code string) OrderStatus {
 	switch code {
 	case "New":
 		return New
@@ -85,4 +86,19 @@ type OrderDao interface {
 	GetById(id string) (*Order, error)
 	GetAll() []*Order
 	Save(order *Order)
+}
+
+
+var orderDao OrderDao
+var onceForOrder sync.Once
+
+func InitOrderDao(initOrderDao OrderDao) OrderDao{
+    onceForOrder.Do(func(){
+            orderDao = initOrderDao
+        })
+    return orderDao
+}
+
+func GetOrderDao() OrderDao {
+    return orderDao
 }

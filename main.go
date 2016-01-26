@@ -8,9 +8,16 @@ import (
     "teadiller/botflow"
     "teadiller/web"
     "teadiller/flows"
+    "teadiller/models"
+    "teadiller/excel"
 )
 
 func main() {
+
+    // Init dao
+    models.InitItemDao(excel.ExcelItemDao{FilePath: os.Getenv("TELEGRAM_BOT_DB_PATH")})
+    models.InitOrderDao(excel.ExcelOrderDao{FilePath: os.Getenv("TELEGRAM_BOT_DB_PATH")})
+
 
     initFlow := botflow.Flow{Command: "", Handler: flows.Default}
     initFlow.Bind("/about", flows.About)

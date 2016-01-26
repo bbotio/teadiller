@@ -1,5 +1,9 @@
 package models
 
+import(
+    "sync"
+)
+
 type ItemType int
 
 const (
@@ -21,4 +25,18 @@ type Item struct {
 type ItemDao interface {
 	GetById(id string) (*Item, error)
 	GetAll() []*Item
+}
+
+var itemDao ItemDao
+var onceForItem sync.Once
+
+func InitItemDao(initItemDao ItemDao) ItemDao{
+    onceForItem.Do(func(){
+            itemDao = initItemDao
+        })
+    return itemDao
+}
+
+func GetItemDao() ItemDao {
+    return itemDao
 }
