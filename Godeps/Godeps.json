@@ -7,6 +7,11 @@
 			"Rev": "1ae7803be06a7a521004632d8aa02dbc38c068f8"
 		},
 		{
+			"ImportPath": "github.com/deckarep/golang-set",
+			"Comment": "v1.5",
+			"Rev": "52ba7f28f319e9d560acbf47c7fcf9b9ee7aa7d3"
+		},
+		{
 			"ImportPath": "github.com/tealeg/xlsx",
 			"Comment": "go1.1.2-443-ge16993b",
 			"Rev": "e16993b205897ff3cf1715e7fa8d0b9c4c847dce"
