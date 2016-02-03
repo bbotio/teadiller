@@ -40,7 +40,7 @@ func (excel ExcelOrderDao) Save(order *models.Order) {
 
 	row.AddCell().SetString(order.Id)
 	row.AddCell().SetString(order.ItemId)
-	row.AddCell().SetString(order.Count)
+	row.AddCell().SetString(fmt.Sprintf("%.2f", order.Count))
 	row.AddCell().SetString(order.Buyer.Name)
 	row.AddCell().SetString(order.Delivery.DeliveryType.String())
 	row.AddCell().SetString(order.Delivery.Address)
@@ -75,7 +75,7 @@ func parseOrdersSheet(sheet *xlsx.Sheet) []*models.Order {
 			case 1:
 				order.ItemId = cell.Value
 			case 2:
-				order.Count = strconv.ParseFloat(cell.Value, 64)
+				order.Count,_ = strconv.ParseFloat(cell.Value, 64)
 			case 3:
 				order.Buyer.Name = cell.Value
 			case 4:
