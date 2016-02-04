@@ -5,6 +5,7 @@ import (
     "log"
     "strings"
     "teadiller/Godeps/_workspace/src/github.com/Syfaro/telegram-bot-api"
+    "regexp"
 )
 
 type Context map[string]interface{}
@@ -86,7 +87,7 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
                         if flow.Command == "" { // found default flow
                             log.Printf("Set default flow")
                             foundFlow = *flow
-                        } else if flow.Command == text { // found command flow
+                        } else if match,_ := regexp.MatchString(flow.Command, text); match { // found command flow
                             log.Printf("Found command handler %s", flow)
                             foundFlow = *flow
                             break
