@@ -10,7 +10,7 @@ import (
 type Context map[string]interface{}
 
 type Flow struct {
-    Nexts []Flow // list of next steps. So list of flows use here because it depends on context
+    Nexts []*Flow // list of next steps. So list of flows use here because it depends on context
     Command string // Default handler has this field is nil otherwise command name
     Handler func(updateMessage tgbotapi.Message, requestContext Context) ([]tgbotapi.MessageConfig, error) // hundler function
 }
@@ -21,10 +21,10 @@ type UserRuntime struct {
 }
 
 // this function bind to the current frow new one and return binded flow
-func (f *Flow) Bind(command string, handler func(tgbotapi.Message, Context) ([]tgbotapi.MessageConfig, error)) Flow {
+func (f *Flow) Bind(command string, handler func(tgbotapi.Message, Context) ([]tgbotapi.MessageConfig, error)) *Flow {
     bindedFlow := Flow{nil, command, handler}
-    f.Nexts = append(f.Nexts, bindedFlow)
-    return bindedFlow
+    f.Nexts = append(f.Nexts, &bindedFlow)
+    return &bindedFlow
 }
 
 func StartBot(token string, botname string, initFlow Flow, done chan bool)  error {
@@ -33,12 +33,13 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
         return err
     }
 
-    runtime := make(map[string]UserRuntime)
+    runtime := make(map[string]*UserRuntime)
 
     updateConfiguration := tgbotapi.NewUpdate(0)
     updateConfiguration.Timeout = 60
 
     updates, err := bot.GetUpdatesChan(updateConfiguration)
+
     go func() {
         for {
             select {
@@ -48,10 +49,14 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
                     userRuntimeId := fmt.Sprintf("%s_%s", update.Message.From.ID, update.Message.Chat.ID)
                     var userRuntime UserRuntime = UserRuntime{}
 
-                    userRuntime, ok := runtime[userRuntimeId]
+                    userRuntimePointer, ok := runtime[userRuntimeId]
                     if (!ok) {
                         userRuntime = UserRuntime{Context{}, initFlow}
+                        runtime[userRuntimeId] = &userRuntime
                         log.Printf("Init runtime %s", userRuntime)
+                    } else {
+                        userRuntime = *userRuntimePointer
+                        log.Printf("Found runtime %s", userRuntime)
                     }
 
                     text := update.Message.Text
@@ -77,12 +82,13 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
 
                     log.Printf("Handle the following text '%s'", text)
                     for _, flow := range nextFlows {
+                        log.Printf("Check the following flow: %s", flow)
                         if flow.Command == "" { // found default flow
                             log.Printf("Set default flow")
-                            foundFlow = flow
+                            foundFlow = *flow
                         } else if flow.Command == text { // found command flow
                             log.Printf("Found command handler %s", flow)
-                            foundFlow = flow
+                            foundFlow = *flow
                             break
                         }
                     }

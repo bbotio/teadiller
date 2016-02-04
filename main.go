@@ -21,8 +21,8 @@ func main() {
 
     initFlow := botflow.Flow{Command: "", Handler: flows.Default}
     initFlow.Bind("/about", flows.About)
-    initFlow.Bind("/categories", flows.Categories)
-    log.Printf("Bot Flow: %s", initFlow)
+    categoriesFlow := initFlow.Bind("/categories", flows.Categories)
+    categoriesFlow.Bind("/show", flows.Show)
 
 
     done := make(chan bool)
