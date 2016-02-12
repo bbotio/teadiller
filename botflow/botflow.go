@@ -18,7 +18,7 @@ type Flow struct {
 
 type UserRuntime struct {
     UserContext Context
-    UserFlow Flow
+    UserFlow *Flow
 }
 
 // this function bind to the current frow new one and return binded flow
@@ -52,7 +52,7 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
 
                     userRuntimePointer, ok := runtime[userRuntimeId]
                     if (!ok) {
-                        userRuntime = UserRuntime{Context{}, initFlow}
+                        userRuntime = UserRuntime{Context{}, &initFlow}
                         runtime[userRuntimeId] = &userRuntime
                         log.Printf("Init runtime %s", userRuntime)
                     } else {
@@ -94,7 +94,7 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
                         }
                     }
 
-                    userRuntime.UserFlow = foundFlow
+                    *userRuntime.UserFlow = foundFlow
 
                     responses, _ := userRuntime.UserFlow.Handler(update.Message, userRuntime.UserContext)
                     // TODO: check error
