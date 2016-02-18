@@ -94,13 +94,17 @@ func StartBot(token string, botname string, initFlow Flow, done chan bool)  erro
                         }
                     }
 
-                    *userRuntime.UserFlow = foundFlow
+					responses, err := foundFlow.Handler(update.Message, userRuntime.UserContext)
+					if err != nil {
+						errorMessage := tgbotapi.NewMessage(update.Message.Chat.ID, err.Error())
+						bot.Send(errorMessage)
+					} else {
+						*userRuntime.UserFlow = foundFlow
+						for _, response := range responses {
+							bot.Send(response)
+						}
+					}
 
-                    responses, _ := userRuntime.UserFlow.Handler(update.Message, userRuntime.UserContext)
-                    // TODO: check error
-                    for _,response := range responses {
-                        bot.Send(response)
-                    }
                 case <- done:
                     log.Printf("Handling of bot updates were stoped")
                     return
