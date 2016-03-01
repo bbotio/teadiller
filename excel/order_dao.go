@@ -24,6 +24,15 @@ func (excel ExcelOrderDao) GetById(id string) (*models.Order, error) {
 	return nil, errors.New("Order with id = " + id + " not found.")
 }
 
+func (excel ExcelOrderDao) GetByPayPalToken(token string) (*models.Order, error) {
+	for _, order := range excel.orders {
+		if order.PaypalToken == token {
+			return order, nil
+		}
+	}
+	return nil, errors.New("Order with paypalToken = " + token + " not found.")
+}
+
 func (excel ExcelOrderDao) GetAll() []*models.Order {
 	if excel.orders == nil {
 		excel.ParseOrders()
@@ -46,10 +55,11 @@ func (excel ExcelOrderDao) Save(order *models.Order) {
 	row.AddCell().SetString(order.Delivery.Address)
 	row.AddCell().SetString(fmt.Sprint(order.Datetime.Format(time.ANSIC)))
 	row.AddCell().SetString(order.Status.String())
-	row.AddCell().SetString(order.PaypallToken)
+	row.AddCell().SetString(order.PaypalToken)
 	row.AddCell().SetString(order.Comment)
 
 	file.Save(excel.FilePath)
+	excel.orders = append(excel.orders, order)
 }
 
 func (excel *ExcelOrderDao) ParseOrders() {
@@ -87,7 +97,7 @@ func parseOrdersSheet(sheet *xlsx.Sheet) []*models.Order {
 			case 7:
 				order.Status = order.Status.Parse(cell.Value)
 			case 8:
-				order.PaypallToken = cell.Value
+				order.PaypalToken = cell.Value
 			case 9:
 				order.Comment = cell.Value
 			}

@@ -11,16 +11,16 @@ import (
 func Categories(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
     itemDao := models.GetItemDao()
     items := itemDao.GetAll()
-    categorieMessages := mapset.NewSet()
+    categoriesMessages := mapset.NewSet()
 
     for _, item := range items {
         for _, tag := range item.Tags {
-            categorieMessages.Add(tag)
+            categoriesMessages.Add(tag)
         }
     }
 
     result := []tgbotapi.MessageConfig{}
-    for category := range categorieMessages.Iter() {
+    for category := range categoriesMessages.Iter() {
         msg := tgbotapi.NewMessage(msg.Chat.ID, category.(string))
         result = append(result, msg)
     }

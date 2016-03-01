@@ -19,6 +19,7 @@ type Item struct {
     Tags []string
     Type ItemType
     Count float64
+	Price float64
     AdditionalFields map[string]string
 }
 

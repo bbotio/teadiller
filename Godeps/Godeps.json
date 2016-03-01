@@ -7,9 +7,25 @@
 			"Rev": "1ae7803be06a7a521004632d8aa02dbc38c068f8"
 		},
 		{
+			"ImportPath": "github.com/crowdmob/paypal",
+			"Rev": "16a02fcc01f42f5e9ec728e0763e4d08a5fd9e06"
+		},
+		{
 			"ImportPath": "github.com/deckarep/golang-set",
 			"Comment": "v1.5",
 			"Rev": "52ba7f28f319e9d560acbf47c7fcf9b9ee7aa7d3"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "1c83b3eabd45b6d76072b66b746c20815fb2872d"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "26a6070f849969ba72b72256e9f14cf519751690"
+		},
+		{
+			"ImportPath": "github.com/jasonwinn/geocoder",
+			"Rev": "e1b3b6a2d440f06997b4d4bc3d091a3fb1249f6f"
 		},
 		{
 			"ImportPath": "github.com/tealeg/xlsx",
