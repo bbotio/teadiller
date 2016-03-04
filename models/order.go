@@ -33,15 +33,15 @@ type Delivery struct {
 }
 
 type Order struct {
-	Id           string
-	ItemId       string
-	Count        float64
-	Buyer        Buyer
-	Delivery     Delivery
-	Datetime     time.Time
-	Status       OrderStatus
-	PaypallToken string
-	Comment      string // comments from seller
+	Id          string
+	ItemId      string
+	Count       float64
+	Buyer       Buyer
+	Delivery    Delivery
+	Datetime    time.Time
+	Status      OrderStatus
+	PaypalToken string
+	Comment     string // comments from seller
 }
 
 func (dt DeliveryType) Parse(deliveryType string) DeliveryType {
@@ -85,6 +85,7 @@ func (os OrderStatus) Parse(code string) OrderStatus {
 
 type OrderDao interface {
 	GetById(id string) (*Order, error)
+	GetByPayPalToken(token string) (*Order, error)
 	GetAll() []*Order
 	Save(order *Order)
 }
