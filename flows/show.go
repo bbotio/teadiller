@@ -2,12 +2,25 @@ package flows
 
 import (
     "teadiller/botflow"
-//    "teadiller/Godeps/_workspace/src/github.com/deckarep/golang-set"
     "teadiller/Godeps/_workspace/src/github.com/Syfaro/telegram-bot-api"
-//    "teadiller/models"
+    "teadiller/models"
 )
 
 
 func Show(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
-    return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "Some shit")}, nil
+    itemDao := models.GetItemDao()
+    if (msg.ReplyToMessage != nil) {
+        categoryName := msg.ReplyToMessage.Text
+        items := itemDao.GetByCategory(categoryName)
+
+        if len(items) > 0 {
+            result := []tgbotapi.MessageConfig{}
+            for _, item := range items {
+                result = append(result, tgbotapi.NewMessage(msg.Chat.ID, item.Name + " http://localhost:8080/items/" + item.Id))
+            }
+            return result, nil
+        }
+    }
+
+    return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "Sorry I don't know what to show")}, nil
 }

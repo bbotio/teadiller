@@ -25,6 +25,7 @@ type Item struct {
 
 type ItemDao interface {
 	GetById(id string) (*Item, error)
+    GetByCategory(category string) []*Item
 	GetAll() []*Item
 }
 
