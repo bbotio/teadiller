@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-func Buy(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+func Buy(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.Chattable, error) {
 	itemName := msg.ReplyToMessage.Text;
 
 	if !isValidItem(itemName) {
-		return []tgbotapi.MessageConfig{}, errors.New("Invalid item " + itemName)
+		return []tgbotapi.Chattable{}, errors.New("Invalid item " + itemName)
 	}
 
 	// todo: get item by name
@@ -32,7 +32,7 @@ func Buy(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, e
 	ctx["item"] = item
 	ctx["order"] = order
 
-	return []tgbotapi.MessageConfig{
+	return []tgbotapi.Chattable{
 		tgbotapi.NewMessage(msg.Chat.ID, "How many? Available count " + strconv.FormatFloat(item.Count, 'f', 6, 64))},
 	nil
 }

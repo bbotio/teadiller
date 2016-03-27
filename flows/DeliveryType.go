@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-func DeliveryType(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+func DeliveryType(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.Chattable, error) {
 	order := ctx["order"].(models.Order)
 	switch msg.Text {
 	case "Russian Post":
@@ -20,5 +20,5 @@ func DeliveryType(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.Message
 	}
 
 	ctx["order"] = order
-	return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "Please, enter delivery address")}, nil
+	return []tgbotapi.Chattable{tgbotapi.NewMessage(msg.Chat.ID, "Please, enter delivery address")}, nil
 }

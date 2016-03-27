@@ -6,6 +6,6 @@ import (
 )
 
 
-func Default(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
-    return []tgbotapi.MessageConfig{tgbotapi.NewMessage(msg.Chat.ID, "Would you like tea?")}, nil
+func Default(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.Chattable, error) {
+    return []tgbotapi.Chattable{tgbotapi.NewMessage(msg.Chat.ID, "Would you like tea?")}, nil
 }
