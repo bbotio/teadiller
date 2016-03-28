@@ -8,11 +8,35 @@ docker run --rm -it -v "$PWD":/go/src/teadiller -w /go/src/teadiller --env GOPAT
 OR
 compile and run
 ```
-docker run --rm -t -v "$PWD":/go/src/teadiller -w /go/src/teadiller --env GOPATH="/go" --env TELEGRAMM_TOKEN="<your_token>" --env TELEGRAM_BOT_NAME="<your_botname>" --env TELEGRAM_BOT_WEB_PORT="<your_web_port>" --env TELEGRAM_BOT_DB_PATH="<path to xlsx>" -p $TELEGRAM_BOT_WEB_PORT:$TELEGRAM_BOT_WEB_PORT golang go run main.go
+docker run --rm -t -v "$PWD":/go/src/teadiller -w /go/src/teadiller --env GOPATH="/go" 
+--env TELEGRAMM_TOKEN="<your_token>"
+--env TELEGRAM_BOT_NAME="<your_botname>" 
+--env TELEGRAM_BOT_WEB_PORT="<your_web_port>" 
+--env TELEGRAM_BOT_DB_PATH="<path to xlsx>"
+--env PAYPAL_SANDBOX="<true/false, true for running in sandbox mode>"
+--env PAYPAL_USERNAME="<your paypal username>"
+--env PAYPAL_PASSWORD="<your paypal password>"
+--env PAYPAL_SIGNATURE="<your paypal signature>"
+--env PAYPAL_OK_URL="<redirect to this url if everything is ok...>"
+--env PAYPAL_CANCEL_URL="<...otherwise, redirect to this>"
+--env GEOCODER_API_KEY="<get api key at http://mapquestapi.com>"
+-p $TELEGRAM_BOT_WEB_PORT:$TELEGRAM_BOT_WEB_PORT golang go run main.go
 ```
 Run detached 
 ```
-docker run -d -v "$PWD":/go/src/teadiller -w /go/src/teadiller --env GOPATH="/go" --env TELEGRAMM_TOKEN="<your_token>" --env TELEGRAM_BOT_NAME="<your_botname>" --env TELEGRAM_BOT_WEB_PORT="<web_port>" --env TELEGRAM_BOT_DB_PATH="<path to xlsx>" -p $TELEGRAM_BOT_WEB_PORT:$TELEGRAM_BOT_WEB_PORT golang go run main.go
+docker run -d -v "$PWD":/go/src/teadiller -w /go/src/teadiller --env GOPATH="/go"
+--env TELEGRAMM_TOKEN="<your_token>"
+--env TELEGRAM_BOT_NAME="<your_botname>"
+--env TELEGRAM_BOT_WEB_PORT="<web_port>"
+--env TELEGRAM_BOT_DB_PATH="<path to xlsx>"
+--env PAYPAL_SANDBOX="<true/false, true for running in sandbox mode>"
+--env PAYPAL_USERNAME="<your paypal username>"
+--env PAYPAL_PASSWORD="<your paypal password>"
+--env PAYPAL_SIGNATURE="<your paypal signature>"
+--env PAYPAL_OK_URL="<redirect to this url if everything is ok...>"
+--env PAYPAL_CANCEL_URL="<...otherwise, redirect to this>"
+--env GEOCODER_API_KEY="<get api key at http://mapquestapi.com>"
+-p $TELEGRAM_BOT_WEB_PORT:$TELEGRAM_BOT_WEB_PORT golang go run main.go
 ```
 
 ## Configurations
