@@ -13,7 +13,7 @@ type Context map[string]interface{}
 type Flow struct {
     Nexts []*Flow // list of next steps. So list of flows use here because it depends on context
     Command string // Default handler has this field is nil otherwise command name
-    Handler func(updateMessage tgbotapi.Message, requestContext Context) ([]tgbotapi.MessageConfig, error) // hundler function
+    Handler func(updateMessage tgbotapi.Message, requestContext Context) ([]tgbotapi.Chattable, error) // hundler function
 }
 
 type UserRuntime struct {
@@ -22,7 +22,7 @@ type UserRuntime struct {
 }
 
 // this function bind to the current frow new one and return binded flow
-func (f *Flow) Bind(command string, handler func(tgbotapi.Message, Context) ([]tgbotapi.MessageConfig, error)) *Flow {
+func (f *Flow) Bind(command string, handler func(tgbotapi.Message, Context) ([]tgbotapi.Chattable, error)) *Flow {
     bindedFlow := Flow{nil, command, handler}
     f.Nexts = append(f.Nexts, &bindedFlow)
     return &bindedFlow

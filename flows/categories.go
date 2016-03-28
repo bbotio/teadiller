@@ -8,7 +8,7 @@ import (
 )
 
 
-func Categories(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+func Categories(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.Chattable, error) {
     itemDao := models.GetItemDao()
     items := itemDao.GetAll()
     categoriesMessages := mapset.NewSet()
@@ -19,7 +19,7 @@ func Categories(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageCo
         }
     }
 
-    result := []tgbotapi.MessageConfig{}
+    result := []tgbotapi.Chattable{}
     for category := range categoriesMessages.Iter() {
         msg := tgbotapi.NewMessage(msg.Chat.ID, category.(string))
         result = append(result, msg)

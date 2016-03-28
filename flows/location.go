@@ -12,9 +12,9 @@ import (
 	"log"
 )
 
-var EMPTY_BODY = []tgbotapi.MessageConfig{}
+var EMPTY_BODY = []tgbotapi.Chattable{}
 
-func Location(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+func Location(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.Chattable, error) {
 	order := ctx["order"].(models.Order)
 
 	if msg.Location.Latitude == 0 && msg.Location.Longitude == 0 {
@@ -46,7 +46,7 @@ func Location(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConf
 	orderDao.Save(&order)
 
 	paymentUrl := "http://localhost:" + os.Getenv("TELEGRAM_BOT_WEB_PORT") + "/buy/" + order.Id
-	return []tgbotapi.MessageConfig{
+	return []tgbotapi.Chattable{
 		tgbotapi.NewMessage(msg.Chat.ID, order.Delivery.Address),
 		tgbotapi.NewMessage(msg.Chat.ID, "Payment url: " + paymentUrl),
 	}, nil

@@ -1,6 +1,7 @@
 package excel
 
 import (
+    "log"
 	"teadiller/models"
 	"errors"
 	"teadiller/Godeps/_workspace/src/github.com/tealeg/xlsx"
@@ -14,6 +15,9 @@ type ExcelItemDao struct {
 }
 
 func (excel ExcelItemDao) GetById(id string) (*models.Item, error) {
+	if excel.items == nil {
+		excel.ParseItems()
+	}
 	for _, item := range excel.items {
 		if item.Id == id {
 			return item, nil
@@ -29,6 +33,31 @@ func (excel ExcelItemDao) GetAll() []*models.Item {
 	}
 
 	return excel.items
+}
+
+func (excel ExcelItemDao) GetByCategory(category string) []*models.Item {
+	if excel.items == nil {
+		excel.ParseItems()
+	}
+
+    result := []*models.Item{}
+
+    for _, item := range excel.items {
+        isContains := false
+        log.Printf("Item: %s", item.Name)
+        for _, tag := range item.Tags {
+            log.Printf("    Tag: %s", tag)
+            if tag == category {
+                isContains = true
+                break
+            }
+        }
+        if isContains {
+            result = append(result, item)
+        }
+    }
+
+	return result
 }
 
 func (excel *ExcelItemDao) ParseItems() {

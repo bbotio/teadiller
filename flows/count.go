@@ -17,7 +17,7 @@ var keyboard = tgbotapi.ReplyKeyboardMarkup{
 	Selective:true,
 }
 
-func Count(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig, error) {
+func Count(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.Chattable, error) {
 	if _, ok := ctx["item"]; !ok {
 		return EMPTY_BODY, errors.New("Please, choose item")
 	}
@@ -45,6 +45,6 @@ func Count(msg tgbotapi.Message, ctx botflow.Context) ([]tgbotapi.MessageConfig,
 
 	message := tgbotapi.NewMessage(msg.Chat.ID, "Please, choose delivery type")
 	message.ReplyMarkup = keyboard
-	return []tgbotapi.MessageConfig{message}, nil
+	return []tgbotapi.Chattable{message}, nil
 }
 

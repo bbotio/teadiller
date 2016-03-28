@@ -42,8 +42,8 @@ docker run -d -v "$PWD":/go/src/teadiller -w /go/src/teadiller --env GOPATH="/go
 ## Configurations
 | Env variable name | Value |
 |-------------------|-------|
-| TELEGRAMM_TOKEN   |\<Put telegram token here\>|
-| TELEGRAMM_BOT_NAME|\<Put telegram bot name\>|
+| TELEGRAM_TOKEN   |\<Put telegram token here\>|
+| TELEGRAM_BOT_NAME|\<Put telegram bot name\>|
 | TELEGRAM_BOT_WEB_PORT      |\<Put web port\>|
 | TELEGRAM_BOT_DB_PATH |\<Put path to xlsx file\>|
 
